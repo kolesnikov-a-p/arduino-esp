@@ -15,7 +15,7 @@ const char* mqtt_user = "****";
 const char* mqtt_password = "****";
 
 // RELAY
-const String relay_topic = "/home/relay";
+const String relay_topic = "/topic";
 const int RELAY = 16;
 
 // ROOT_CA
@@ -105,8 +105,8 @@ void callback(char* topic, byte* payload, unsigned int length) {
     Serial.println(data_pay);
     
   if( String(topic) == relay_topic ){
-        if(data_pay == "ON") relay_on = true;
-        if(data_pay == "OFF") relay_on = false;
+        if(data_pay == "ON" || data_pay == "1") relay_on = true;
+        if(data_pay == "OFF" || data_pay == "0") relay_on = false;
     }
 
     updateStatePins();

@@ -30,9 +30,9 @@ int led_brig = 50;
 String led_color = "#FFFFFF";
 
 void setPixel(int p, byte r, byte g, byte b) {
-  r = map(r, 0, 255, 0, led_brig);
-  g = map(g, 0, 255, 0, led_brig);
-  b = map(b, 0, 255, 0, led_brig);
+  r = r * led_brig / 100;
+  g = g * led_brig / 100;
+  b = b * led_brig / 100;
   neoPixel.setPixelColor(p, neoPixel.Color(r, g, b));
 }
 

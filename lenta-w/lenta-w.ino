@@ -25,11 +25,10 @@ WiFiClient espClient;
 PubSubClient client(espClient);
 
 bool led_on = false;
-int led_brig = 0;
+int led_brig = 50;
 
 
 void setup_wifi() {
-
   delay(10);
   Serial.println();
   Serial.print("Connecting to ");
@@ -53,7 +52,7 @@ void setup_wifi() {
 
 void updateStatePins(void){
     if(led_on){
-      analogWrite(CHANNEL_W, map(led_brig, 0, 255, 1, 1024));
+      analogWrite(CHANNEL_W, 255 * led_brig / 100);
     }else{
       analogWrite(CHANNEL_W, 0);
     }
@@ -69,8 +68,8 @@ void callback(char* topic, byte* payload, unsigned int length) {
     Serial.println(data_pay);
     
   if( String(topic) == led_topic ){
-        if(data_pay == "ON") led_on = true;
-        if(data_pay == "OFF") led_on = false;
+        if(data_pay == "ON" || data_pay == "1") led_on = true;
+        if(data_pay == "OFF" || data_pay == "0") led_on = false;
     }
 
   if( String(topic) == (led_topic + "/brig") ){
@@ -99,6 +98,8 @@ void reconnect() {
 }
 
 void setup() {
+  analogWriteRange(255);
+
   pinMode(CHANNEL_W, OUTPUT);
   digitalWrite(CHANNEL_W, LOW);
 

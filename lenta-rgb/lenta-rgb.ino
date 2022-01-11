@@ -14,7 +14,7 @@ const char* mqtt_user = "****";
 const char* mqtt_password = "****";
 
 // LENTA
-const String led_topic = "/home/lenta-rgb";
+const String led_topic = "/topic";
 const int CHANNEL_R = 2;
 const int CHANNEL_G = 12;
 const int CHANNEL_B = 16;
@@ -27,12 +27,11 @@ WiFiClient espClient;
 PubSubClient client(espClient);
 
 bool led_on = false;
-int led_brig = 0;
-String led_color = "#000000";
+int led_brig = 50;
+String led_color = "#FFFFFF";
 
 
 void setup_wifi() {
-
   delay(10);
   Serial.println();
   Serial.print("Connecting to ");
@@ -67,9 +66,9 @@ void updateStatePins(void){
 
 
     if(led_on){
-      analogWrite(CHANNEL_R, map(lamp_r, 0, 255, 1, 1024));
-      analogWrite(CHANNEL_G, map(lamp_g, 0, 255, 1, 1024));
-      analogWrite(CHANNEL_B, map(lamp_b, 0, 255, 1, 1024));
+      analogWrite(CHANNEL_R, lamp_r);
+      analogWrite(CHANNEL_G, lamp_g);
+      analogWrite(CHANNEL_B, lamp_b);
     }else{
       analogWrite(CHANNEL_R, 0);
       analogWrite(CHANNEL_G, 0);
@@ -88,8 +87,8 @@ void callback(char* topic, byte* payload, unsigned int length) {
     Serial.println(data_pay);
     
   if( String(topic) == led_topic ){
-        if(data_pay == "ON") led_on = true;
-        if(data_pay == "OFF") led_on = false;
+        if(data_pay == "ON" || data_pay == "1") led_on = true;
+        if(data_pay == "OFF" || data_pay == "0") led_on = false;
     }
 
   if( String(topic) == (led_topic + "/brig") ){
@@ -123,6 +122,8 @@ void reconnect() {
 }
 
 void setup() {
+  analogWriteRange(255);
+
   pinMode(CHANNEL_R, OUTPUT);
   pinMode(CHANNEL_G, OUTPUT);
   pinMode(CHANNEL_B, OUTPUT);

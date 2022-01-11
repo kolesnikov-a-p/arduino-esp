@@ -30,10 +30,10 @@ int led_brig = 50;
 String led_color = "#FFFFFF";
 
 void setPixel(int p, byte r, byte g, byte b, byte w) {
-  r = map(r, 0, 255, 0, led_brig);
-  g = map(g, 0, 255, 0, led_brig);
-  b = map(b, 0, 255, 0, led_brig);
-  w = map(w, 0, 255, 0, led_brig);
+  r = r * led_brig / 100;
+  g = g * led_brig / 100;
+  b = b * led_brig / 100;
+  w = w * led_brig / 100;
   neoPixel.setPixelColor(p, neoPixel.Color(r, g, b, w));
 }
 
@@ -108,8 +108,8 @@ void callback(char* topic, byte* payload, unsigned int length) {
     Serial.println(data_pay);
 
   if( String(topic) == led_topic ){
-        if(data_pay == "ON") led_on = true;
-        if(data_pay == "OFF") led_on = false;
+        if(data_pay == "ON" || data_pay == "1") led_on = true;
+        if(data_pay == "OFF" || data_pay == "0") led_on = false;
     }
 
   if( String(topic) == (led_topic + "/brig") ){

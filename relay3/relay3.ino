@@ -14,9 +14,9 @@ const char* mqtt_user = "****";
 const char* mqtt_password = "****";
 
 // RELAY
-const String relay_topic = "/home/relay";
-const String relay2_topic = "/home/relay2";
-const String relay3_topic = "/home/relay3";
+const String relay_topic = "/topic/relay";
+const String relay2_topic = "/topic/relay2";
+const String relay3_topic = "/topic/relay3";
 
 const int RELAY = 14;
 const int RELAY2 = 15;
@@ -86,18 +86,18 @@ void callback(char* topic, byte* payload, unsigned int length) {
     Serial.println(data_pay);
     
   if( String(topic) == relay_topic ){
-        if(data_pay == "ON") relay_on = true;
-        if(data_pay == "OFF") relay_on = false;
+        if(data_pay == "ON" || data_pay == "1") relay_on = true;
+        if(data_pay == "OFF" || data_pay == "0") relay_on = false;
     }
 
   if( String(topic) == relay2_topic ){
-        if(data_pay == "ON") relay2_on = true;
-        if(data_pay == "OFF") relay2_on = false;
+        if(data_pay == "ON" || data_pay == "1") relay2_on = true;
+        if(data_pay == "OFF" || data_pay == "0") relay2_on = false;
     }
 
   if( String(topic) == relay3_topic ){
-        if(data_pay == "ON") relay3_on = true;
-        if(data_pay == "OFF") relay3_on = false;
+        if(data_pay == "ON" || data_pay == "1") relay3_on = true;
+        if(data_pay == "OFF" || data_pay == "0") relay3_on = false;
     }
 
     updateStatePins();
